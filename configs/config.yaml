@@ -1,0 +1,11 @@
+input_file: "data/all_texts.json"
+output_folder: "embeddings"
+window_size: 3
+num_of_negatives: 10
+batch_size: 2048
+emb_dim: 200
+epochs: 500
+initial_lr: 0.005
+use_cuda: true
+print_every: 2
+
