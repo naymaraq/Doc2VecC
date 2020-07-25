@@ -16,7 +16,8 @@ def inference(texts, word_vecs, word2id):
         id2doc[i]=d
         w_ids = [word2id[w] for w in texts[d].strip().lower().split(' ') if w in word2id]
         vec = np.sum(word_vecs[w_ids], axis = 0)
-        doc_vecs[i] = vec/len(w_ids)
+        if any(w_ids):
+        	doc_vecs[i] = vec/len(w_ids)
 
 
     doc_vecs = normalize_rows(doc_vecs)
