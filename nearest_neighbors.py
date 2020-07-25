@@ -36,10 +36,10 @@ class NN:
 
 class NaiveNN(NN):
 
-    def __init__(self, topk, embedding_folder='./embeddings'):
+    def __init__(self, topk, embedding_folder='./embeddings', doc_or_word="word"):
         self.topk = topk
-        self.vectors_path = os.path.join(embedding_folder, "word_vectors.npy")
-        self.vocab_path = os.path.join(embedding_folder, "index2word.json")
+        self.vectors_path = os.path.join(embedding_folder, "{}_vectors.npy".format(doc_or_word))
+        self.vocab_path = os.path.join(embedding_folder, "index2{}.json".format(doc_or_word))
 
         self.load_vocab()
         self.load_vectors()
@@ -58,10 +58,10 @@ class NaiveNN(NN):
 
 class AproximateNN(NN):
 
-    def __init__(self, topk, embedding_folder='./embeddings'):
+    def __init__(self, topk, embedding_folder='./embeddings', doc_or_word="word"):
         self.topk = topk
-        self.vectors_path = os.path.join(embedding_folder, "word_vectors.npy")
-        self.vocab_path = os.path.join(embedding_folder, "index2word.json")
+        self.vectors_path = os.path.join(embedding_folder, "{}_vectors.npy".format(doc_or_word))
+        self.vocab_path = os.path.join(embedding_folder, "index2{}.json".format(doc_or_word))
 
         self.load_vectors()
         self.load_vocab()
@@ -94,14 +94,15 @@ except:
 parser = argparse.ArgumentParser(description='NN Query')
 
 parser.add_argument('-topk', type=int, default=5)
-parser.add_argument('-word', type=str)
+parser.add_argument('-query', type=str)
+parser.add_argument('-doc', type=str)
 
 args = parser.parse_args()
 
 if __name__ == "__main__":
 
-    nn_obj = nn(args.topk + 1)
-    most_similars, scores = nn_obj.nn_search(args.word)
+    nn_obj = nn(args.topk + 1, doc_or_word='doc' if args.doc else 'word')
+    most_similars, scores = nn_obj.nn_search(args.query)
 
     i = 0
     for k, v in zip(most_similars, scores):

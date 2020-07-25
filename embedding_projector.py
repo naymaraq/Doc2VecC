@@ -25,7 +25,7 @@ def project(word_vecs, id2word):
     embedding = config.embeddings.add()
 
     # The name of the tensor will be suffixed by `/.ATTRIBUTES/VARIABLE_VALUE`
-    embedding.tensor_name = "embedding/.ATTRIBUTES/VARIABLE_VALUE"
+    embedding.tensor_name = "embedding"
     embedding.metadata_path = 'metadata.tsv'
     projector.visualize_embeddings(log_dir, config)
 
@@ -40,9 +40,17 @@ def normalize_rows(x):
     x /= np.sqrt(np.sum(x ** 2, axis=1)).reshape((N, 1)) + 1e-30
     return x
 
+import argparse
+
+parser = argparse.ArgumentParser(description='Embedding Projector')
+
+parser.add_argument('-vecs', type=str)
+parser.add_argument('-vocab', type=str)
+
+args = parser.parse_args()
 
 if __name__ == "__main__":
-    id2word = json.load(open('embeddings/index2word.json', 'r'))
-    word_vecs = np.load("embeddings/word_vectors.npy", allow_pickle=True)
+    id2word = json.load(open(args.vocab, 'r'))
+    word_vecs = np.load(args.vecs, allow_pickle=True)
     word_vecs = normalize_rows(word_vecs)
     project(word_vecs, id2word)
