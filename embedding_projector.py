@@ -25,7 +25,7 @@ def project(word_vecs, id2word):
     embedding = config.embeddings.add()
 
     # The name of the tensor will be suffixed by `/.ATTRIBUTES/VARIABLE_VALUE`
-    embedding.tensor_name = "embedding"
+    embedding.tensor_name = "embedding/.ATTRIBUTES/VARIABLE_VALUE"
     embedding.metadata_path = 'metadata.tsv'
     projector.visualize_embeddings(log_dir, config)
 
