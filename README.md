@@ -4,7 +4,8 @@ This repository contains workflows to reproduce Doc2VecC (see original paper [IC
 
 ## Here are some website queries
 
-```python3 nearest_neighbors.py -topk 10 -doc y -query auto.am
+```python
+python3 nearest_neighbors.py -topk 10 -doc y -query auto.am
 >>>Top 1 nearest: auto.am, score 1.0
 >>>Top 2 nearest: auto.drom.ru, score 0.76
 >>>Top 3 nearest: avtomobil.az, score 0.75
