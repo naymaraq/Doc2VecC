@@ -1,10 +1,10 @@
 import json
 import os
-from tqdm import tqdm
 
 import torch
 import torch.optim as optim
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 
 from doc2vec.dataset import WebTexts, Doc2vecDataset
 from doc2vec.model import Doc2VecC
@@ -37,12 +37,10 @@ class Doc2VecTrainer:
         if self.use_cuda:
             self.doc2vec_model.cuda()
 
-
     def train(self):
 
         optimizer = optim.AdamW(self.doc2vec_model.parameters(), lr=self.initial_lr)
         path_to_save = os.path.join(self.args["output_folder"], "word_vectors.npy")
-
 
         json.dump(self.id2token, open(os.path.join(self.args["output_folder"], "index2word.json"), 'w'))
         for iteration in range(self.iterations):
@@ -69,8 +67,6 @@ class Doc2VecTrainer:
                 print("Iter {}: Loss: {}".format(iteration, running_loss))
 
             self.doc2vec_model.save_embedding(path_to_save)
-
-        
 
 
 tr = Doc2VecTrainer()

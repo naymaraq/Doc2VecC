@@ -4,7 +4,6 @@ import random
 import numpy as np
 import torch
 from torch.utils.data import Dataset
-from tqdm import tqdm
 
 
 class WebTexts:
@@ -94,9 +93,9 @@ class WebTexts:
     def num_sentences(self):
         if hasattr(self, "sentences_count") and self.sentences_count:
             return self.sentences_count
-        else:
-            self.sentences_count = len(self.get_all_sentences())
-            return self.sentences_count
+
+        self.sentences_count = len(self.get_all_sentences())
+        return self.sentences_count
 
     def sub_sampling_prob(self):
 

@@ -20,13 +20,12 @@ class Doc2VecC(nn.Module):
         init.uniform_(self.context_embeddings.weight.data, -initrange, initrange)
 
     def forward(self, center_w, local_context_w, global_context_w, negative_ws, lengths):
-
         emb_c = self.center_embeddings(center_w)
         emb_local = local_context_w.matmul(self.context_embeddings.weight)
         emb_global = global_context_w.matmul(self.context_embeddings.weight)
         emb_global /= lengths
 
-        #Todo averaging is optional
+        # Todo averaging is optional
         if True:
             emb_v = emb_local + emb_global
 
@@ -41,7 +40,7 @@ class Doc2VecC(nn.Module):
 
     def save_embedding(self, file_name):
         u_emb = self.context_embeddings.weight.cpu().data.numpy()
-        #v_emb = self.context_embeddings.weight.cpu().data.numpy()
+        # v_emb = self.context_embeddings.weight.cpu().data.numpy()
 
-        word_embeddings = u_emb #+ v_emb
+        word_embeddings = u_emb  # + v_emb
         word_embeddings.dump(file_name)
