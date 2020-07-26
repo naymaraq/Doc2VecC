@@ -6,18 +6,24 @@ from torch.nn import init
 
 class Doc2VecC(nn.Module):
 
-    def __init__(self, vocab_size, emb_dim):
+    def __init__(self, vocab_size, emb_dim, merge="average"):
         super(Doc2VecC, self).__init__()
 
+        assert merge in ["average", "concat"]
+        self.merge = merge
         self.vocab_size = vocab_size
         self.emb_dim = emb_dim
 
-        self.center_embeddings = nn.Embedding(vocab_size, emb_dim)
+        if self.merge == "concat":
+            self.center_embeddings = nn.Embedding(vocab_size, 2 * emb_dim)
+        elif self.merge == "average":
+            self.center_embeddings = nn.Embedding(vocab_size, emb_dim)
+
         self.context_embeddings = nn.Embedding(vocab_size, emb_dim)
 
-        initrange = 1.0 / self.emb_dim
-        init.uniform_(self.center_embeddings.weight.data, -initrange, initrange)
-        init.uniform_(self.context_embeddings.weight.data, -initrange, initrange)
+        init_range = 1.0 / self.emb_dim
+        init.uniform_(self.center_embeddings.weight.data, -init_range, init_range)
+        init.uniform_(self.context_embeddings.weight.data, -init_range, init_range)
 
     def forward(self, center_w, local_context_w, global_context_w, negative_ws, lengths):
         emb_c = self.center_embeddings(center_w)
@@ -25,9 +31,10 @@ class Doc2VecC(nn.Module):
         emb_global = global_context_w.matmul(self.context_embeddings.weight)
         emb_global /= lengths
 
-        # Todo averaging is optional
-        if True:
+        if self.merge == "average":
             emb_v = emb_local + emb_global
+        else:
+            emb_v = torch.cat((emb_local, emb_global), dim=1)
 
         neg_s = self.center_embeddings(negative_ws)
         pos_score = torch.sum(torch.mul(emb_c, emb_v), dim=1)
@@ -40,7 +47,5 @@ class Doc2VecC(nn.Module):
 
     def save_embedding(self, file_name):
         u_emb = self.context_embeddings.weight.cpu().data.numpy()
-        # v_emb = self.context_embeddings.weight.cpu().data.numpy()
-
-        word_embeddings = u_emb  # + v_emb
+        word_embeddings = u_emb
         word_embeddings.dump(file_name)

@@ -1,10 +1,14 @@
 input_file: "data/all_texts.json"
 output_folder: "embeddings"
+vectors_path: "word_vectors_concat.npy"
+merge: 'concat'
+
 window_size: 3
-curruption_rate: 0.8
+curruption_rate: 0.65
 num_of_negatives: 10
-batch_size: 1024
 emb_dim: 200
+
+batch_size: 1024
 epochs: 120
 initial_lr: 0.005
 use_cuda: true

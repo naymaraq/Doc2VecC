@@ -31,7 +31,7 @@ class Doc2VecTrainer:
         self.iterations = args["epochs"]
         self.initial_lr = args["initial_lr"]
 
-        self.doc2vec_model = Doc2VecC(self.vocab_size, self.emb_dim)
+        self.doc2vec_model = Doc2VecC(self.vocab_size, self.emb_dim, args["merge"])
         self.use_cuda = torch.cuda.is_available() and args["use_cuda"]
         self.device = torch.device("cuda" if self.use_cuda else "cpu")
         if self.use_cuda:
@@ -40,7 +40,7 @@ class Doc2VecTrainer:
     def train(self):
 
         optimizer = optim.AdamW(self.doc2vec_model.parameters(), lr=self.initial_lr)
-        path_to_save = os.path.join(self.args["output_folder"], "word_vectors.npy")
+        path_to_save = os.path.join(self.args["output_folder"], self.args["vectors_path"])
 
         json.dump(self.id2token, open(os.path.join(self.args["output_folder"], "index2word.json"), 'w'))
         for iteration in range(self.iterations):
