@@ -2,7 +2,7 @@
 PyTroch implemantation of Doc2VecC <br>
 This repository contains workflows to reproduce Doc2VecC (see original paper [ICLR, 2017](https://openreview.net/pdf?id=B1Igu2ogg))
 
-## Here is an example of some website query
+## Here is an example of website query
 
 ```python
 python3 nearest_neighbors.py -topk 10 -doc y -query auto.am
